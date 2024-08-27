@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<head lang="pt-br">
+	<meta charset="utf-8">
+	<title>Balão no Ano | Eskimo</title>
+	<link rel="icon" href="https://images.emojiterra.com/google/android-11/512px/1f388.png">
+	<script src="./math.js"></script>
+	<style>
+		body {
+			background-color: #222631;
+			color: white;
+			transition: .4s background-color linear;
+		}
+
+		#main {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			text-align: center;
+			width: 34%;
+			height: 50%;
+			padding: 48px 32px;
+			border-radius: 8px;
+			/*background-color: #773441;*/
+			background-color: #344c77;
+			box-shadow: 0px 8px 0px black;
+			word-break: break-word;
+			transition: .4s background-color linear;
+		}
+
+		#main hr {
+			margin-top: -20px;
+			margin-bottom: 14px;
+		}
+
+		#main label {
+			font-size: 20px;
+		}
+
+		#ano {
+			margin-bottom: 12px;
+		}
+
+		#main select, #main input {
+			font-size: 18px;
+			/*color: #e59fad;*/
+			color: #9fade5;
+			border: 0;
+			outline: 0;
+			/*background-color: #8f3f4e;*/
+			background-color: #3f638f;
+			padding: 5px 2px;
+			border-radius: 8px;
+			transition: .4s background-color linear, .4s color linear;
+			text-align: center;
+		}
+
+		#baloes {
+			margin-top: 150px;
+			overflow-x: auto;
+			word-break: auto-phrase;
+		}
+
+		#btn {
+			cursor: pointer;
+		}
+
+		#btn:hover {
+			filter: brightness(1.6);
+		}
+
+		/* Switch CSS */
+
+		.switch {
+			position: relative;
+			display: inline-block;
+			width: 38px;
+			height: 22px;
+		}
+
+		.switch input {
+			opacity: 0;
+			width: 0;
+			height: 0;
+		}
+
+		.slider {
+			position: absolute;
+			cursor: pointer;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: #ccc;
+			-webkit-transition: .4s;
+			transition: .4s;
+		}
+
+		.slider:before {
+			position: absolute;
+			content: "";
+			height: 17px;
+			width: 17px;
+			left: 4px;
+			bottom: 13.5%;
+			background-color: white;
+			-webkit-transition: .4s;
+			transition: .4s;
+		}
+
+		input:checked + .slider {
+			background-color: #2196F3;
+		}
+
+		input:focus + .slider {
+			box-shadow: 0 0 1px #2196F3;
+		}
+
+		input:checked + .slider:before {
+			-webkit-transform: translateX(14px);
+			-ms-transform: translateX(14px);
+			transform: translateX(14px);
+		}
+
+		.slider.round {
+			border-radius: 34px;
+		}
+
+		.slider.round:before {
+			border-radius: 50%;
+		}
+
+		#switcher {
+			margin-top: 20px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		#switcher > span {
+			width: 33.3%;
+			font-size: 18px;
+		}
+
+		/* Curiosidade */
+
+		#curious {
+			font-size: 20px;
+			font-weight: bold;
+			width: 32px;
+			height: 32px;
+			font-family: monospace;
+			position: absolute;
+			bottom: 12px;
+			right: 12px;
+			color: wheat;
+			border: 3px solid wheat;
+			border-radius: 8px;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    cursor: pointer;
+		    opacity: 100%;
+		    transition: .3s width linear;
+		    overflow: hidden;
+		}
+	</style>
+</head>
+<body>
+	<div id="main">
+		<h1>Calculadora de Balão 🎈</h1>
+		<hr>
+		<form>
+			<label for="ano">Ano:</label>
+			<input type="number" id="ano" value="2024" required>
+
+			<br>
+
+			<label for="pessoa">Pessoa:</label>
+			<select id="pessoa">
+				<option value="0">Eskimo</option>
+				<option value="1">Ghile</option>
+			</select>
+
+			<input type="button" id="btn" value="Calcular">
+
+			<div id="switcher">
+				<span>Notação Científica</span>
+				<label class="switch">
+					<input type="checkbox" id="cbox">
+					<span class="slider round"></span>
+				</label>
+			</div>
+
+		</form>
+
+		<h1 id="baloes"></h1>
+	</div>
+
+	<div id="curious">?</div>
+
+	<script>
+		let open = false;
+		curious.onclick = () => {
+			if (!open){
+				curious.style.width = "70%";
+				curious.innerHTML = "A ordem estimada de átomos no universo observável é da ordem de 10<sup style='margin-top:-10px'>80</sup>.";
+			} else {
+				curious.style.width = "32px";
+				curious.innerText = "?";
+			}
+			open = !open;
+		}
+	
+		if (!localStorage.getItem("notcien")){
+			localStorage.setItem("notcien", "0");
+		}
+		let notcien = (localStorage.getItem("notcien") == "0") ? false : true;
+
+		if (notcien) cbox.checked = "true";
+
+		let valor = "";
+		let show = "";
+		let idade;
+
+		cbox.onclick = () => {
+			notcien = !notcien;
+			localStorage.setItem("notcien", (notcien ? "1" : "0"));
+
+			if (valor != ""){
+				if (notcien) show = BigNotation(valor, 2, true);
+    	        else show = BigPrint(valor);
+
+	            document.querySelector("#baloes").innerHTML = `🎈 ${show} BALÕES (${idade} ANOS) 🎈`;
+            }
+		}
+
+		document.querySelector("#pessoa").onchange = () => {
+			baloes.innerText = "";
+			if (document.querySelector("#pessoa").value == '0'){
+				document.title = "Balão no Ano | Eskimo";
+
+				document.querySelector("body").style.backgroundColor = "#222631";
+				document.querySelector("#main").style.backgroundColor = "#344c77";
+				[...document.querySelectorAll("#main select, #main input")].map(x => x.style.backgroundColor = "#3f638f");
+				[...document.querySelectorAll("#main select, #main input")].map(x => x.style.color = "#9fade5");
+			} else {
+				document.title = "Balão no Ano | Ghile";
+
+				document.querySelector("body").style.backgroundColor = "#312226";
+				document.querySelector("#main").style.backgroundColor = "#773441";
+				[...document.querySelectorAll("#main select, #main input")].map(x => x.style.backgroundColor = "#8f3f4e");
+				[...document.querySelectorAll("#main select, #main input")].map(x => x.style.color = "#e59fad");
+			}
+		}
+		
+		btn.onclick = () => {
+			let ano = parseInt(document.querySelector("#ano").value);
+			let pessoa = parseInt(document.querySelector("#pessoa").value);
+
+			if (ano >= 2024){
+				let exp = (pessoa + 2*(ano-2024)).toString();
+				valor = BigMult( "50", BigPow("2", exp) );
+
+				if (notcien) show = BigNotation(valor, 2, true);
+				else show = BigPrint(valor);
+
+				idade = BigPrint( ( ano-(pessoa*1998+!(pessoa)*2003) ).toString() );
+				
+				document.querySelector("#baloes").innerHTML = `🎈 ${show} BALÕES (${idade} ANOS) 🎈`;
+			} else 
+				document.querySelector("#baloes").innerText = `Começa a partir de 2024 👍`;
+		}
+	</script>
+</body>
