@@ -172,7 +172,7 @@
 		<hr>
 		<form>
 			<label for="ano">Ano:</label>
-			<input type="number" id="ano" required>
+			<input type="number" id="ano" value="2024" required>
 
 			<br>
 
@@ -201,7 +201,7 @@
 
 	<script>
 		ano.value = new Date().getFullYear();
-		
+
 		let open = false;
 		curious.onclick = () => {
 			if (!open){
@@ -272,6 +272,12 @@
 				document.querySelector("#baloes").innerHTML = `🎈 ${show} BALÕES (${idade} ANOS) 🎈`;
 			} else 
 				document.querySelector("#baloes").innerText = `Começa a partir de 2024 👍`;
+		}
+
+		document.onkeydown = (e) => {
+			if (e.key == '/'){
+				window.alert("Aniversários (ou não, pode ser mentira)\nEskimo: 24/06/2003;\nGhile: 22/07/1998.");
+			}
 		}
 	</script>
 </body>

@@ -56,7 +56,7 @@ function BigDivInt(s, n){
 		if (i < s.length-1) dig[i+1] += (dig[i]%1)*10;
 		dig[i] = parseInt(dig[i]);
 	}
-	if (dig.length > 1 && dig[0] == 0) {
+	while(dig.length > 1 && dig[0] == 0) {
 		dig.splice(0,1);
 	}
 	return dig.join("");
