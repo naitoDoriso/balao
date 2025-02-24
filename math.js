@@ -1,3 +1,5 @@
+ano.value = new Date().getFullYear();
+
 function BigMult(s, t){
     let dig = [];
     let r = 0;
